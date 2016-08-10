@@ -85,13 +85,6 @@ function denormalizeObject(obj, entities, schema, bag) {
       const itemSchema = getIn(schema, [attribute]);
 
       denormalized = setIn(denormalized, [attribute], denormalize(item, entities, itemSchema, bag));
-
-      // If schema has a property called `computed` add it to the
-      // final denormalized object. This property contains a collection
-      // of method to compute data from the final entity.
-      if (schema.hasOwnProperty('computed')) {
-        denormalized = Object.assign(denormalized, schema.computed);
-      }
     });
 
   return denormalized;
@@ -123,6 +116,13 @@ function denormalizeEntity(entityOrId, entities, schema, bag) {
     // denormalizeObject, it will already exist.
     bag[key][id] = obj;
     bag[key][id] = denormalizeObject(obj, entities, schema, bag);
+  }
+
+  // If schema has a property called `computed` add it to the
+  // final denormalized object. This property contains a collection
+  // of method to compute data from the final entity.
+  if (schema.hasOwnProperty('computed')) {
+    bag[key][id] = Object.assign(bag[key][id], schema.computed);
   }
 
   return bag[key][id];
