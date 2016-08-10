@@ -90,7 +90,7 @@ function denormalizeObject(obj, entities, schema, bag) {
       // final denormalized object. This property contains a collection
       // of method to compute data from the final entity.
       if (schema.hasOwnProperty('computed')) {
-        denormalized = Object.assign({}, denormalized, schema.computed);
+        denormalized = Object.assign(denormalized, schema.computed);
       }
     });
 
