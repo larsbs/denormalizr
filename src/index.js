@@ -82,8 +82,8 @@ function denormalizeObject(obj, entities, schema, bag) {
       const item = getIn(obj, [attribute]);
       const itemSchema = getIn(schema, [attribute]);
 
-      if (typeof getIn(obj, [attribute]) === 'undefined') {
-        denormalized = setIn(denormalized, [attribute], item);
+      if (typeof getIn(obj, [attribute]) === 'undefined' && schema[attribute] instanceof IterableSchema) {
+        denormalized = setIn(denormalized, [attribute], []);
       }
       else {
         denormalized = setIn(denormalized, [attribute], denormalize(item, entities, itemSchema, bag));
