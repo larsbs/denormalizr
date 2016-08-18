@@ -78,13 +78,16 @@ function denormalizeObject(obj, entities, schema, bag) {
 
   Object.keys(schema)
     .filter(attribute => attribute.substring(0, 1) !== '_')
-    .filter(attribute => typeof getIn(obj, [attribute]) !== 'undefined')
     .forEach(attribute => {
-
       const item = getIn(obj, [attribute]);
       const itemSchema = getIn(schema, [attribute]);
 
-      denormalized = setIn(denormalized, [attribute], denormalize(item, entities, itemSchema, bag));
+      if (typeof getIn(obj, [attribute]) === 'undefined') {
+        denormalized = setIn(denormalized, [attribute], item);
+      }
+      else {
+        denormalized = setIn(denormalized, [attribute], denormalize(item, entities, itemSchema, bag));
+      }
     });
 
   return denormalized;
