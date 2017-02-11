@@ -3,7 +3,6 @@
   "version": "0.5.1",
   "description": "Denormalizer for normalizr",
   "main": "lib/index.js",
-  "browser": "dist/denormalizr.min.js",
   "files": [
     "lib", "dist"
   ],
