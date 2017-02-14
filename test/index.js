@@ -495,4 +495,119 @@ describe('denormalize', () => {
       expect(denormalized).to.be.eql(expectedArticles);
     });
   });
+
+  describe('when adding computed properties', () => {
+    const articleSchema = new schema.Entity('articles');
+    const userSchema = new schema.Entity('users');
+    const collectionSchema = new schema.Entity('collections');
+
+    articleSchema.define({
+      author: userSchema,
+      collections: new schema.Array(collectionSchema),
+
+      _computed: {
+        getDumbComputedProperty() {
+          return 'dumb-computed-property';
+        },
+      },
+    });
+
+    userSchema.define({
+      _computed: {
+        getDumbComputedProperty() {
+          return 'dumb-computed-property';
+        },
+      },
+    });
+
+    collectionSchema.define({
+      curator: userSchema,
+
+      _computed: {
+        getDumbComputedProperty() {
+          return 'dumb-computed-property';
+        },
+      },
+    });
+
+    const article1 = {
+      id: 1,
+      title: 'Some Article',
+      author: {
+        id: 1,
+        name: 'Dan',
+      },
+      collections: [{
+        id: 1,
+        name: 'Dan',
+      }, {
+        id: 2,
+        name: 'Giampaolo',
+      }],
+    };
+    const article2 = {
+      id: 2,
+      title: 'Other Article',
+      author: {
+        id: 1,
+        name: 'Dan',
+      },
+    };
+    const article3 = {
+      id: 3,
+      title: 'Without author',
+      author: null,
+      collections: [ 123 ],
+    };
+
+    const article4 = {
+      id: 4,
+      title: 'Some Article',
+      author: {
+        id: '',
+        name: 'Deleted',
+      },
+      collections: [{
+        id: '',
+        name: 'Deleted',
+      }],
+    };
+
+    const response = {
+      articles: [article1, article2, article3, article4],
+    };
+
+    // Function to return the result of the normalize function. Needed so that
+    // state doesn't hang around between specs.
+    const getNormalizedEntities = () => normalize(response, {
+      articles: new schema.Array(articleSchema),
+    });
+
+    it('should add the computed properties to the final entity', () => {
+      const data = getNormalizedEntities();
+      const article = data.entities.articles['1'];
+      const result = denormalize(article, data.entities, articleSchema);
+      expect(result.getDumbComputedProperty).to.exist;
+      expect(result.getDumbComputedProperty()).to.equal('dumb-computed-property')
+    });
+
+    it('should add the computed properties to the related entities', () => {
+      const data = getNormalizedEntities();
+      const article = data.entities.articles['1'];
+      const result = denormalize(article, data.entities, articleSchema);
+      expect(result.author.getDumbComputedProperty).to.exist;
+      expect(result.author.getDumbComputedProperty()).to.equal('dumb-computed-property')
+      expect(result.collections.every((c) => c.hasOwnProperty('getDumbComputedProperty'))).to.be.true;
+      expect(result.collections.every((c) => c.getDumbComputedProperty() === 'dumb-computed-property')).to.be.true;
+    });
+
+    it('shouldn\'t add computed properties to empty objects in arrays', () => {
+      const data = getNormalizedEntities();
+      const article = data.entities.articles['3'];
+      const result = denormalize(article, data.entities, articleSchema);
+      expect(result.collections.some((c) => c.hasOwnProperty('getDumbComputedProperty'))).to.be.false;
+      expect(result.collections.length).to.equal(0);
+    });
+  });
+
 });

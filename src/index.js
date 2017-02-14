@@ -1,6 +1,7 @@
 import { schema as Schema } from 'normalizr';
 import merge from 'lodash/merge';
 import isObject from 'lodash/isObject';
+import isEmpty from 'lodash/isEmpty';
 import { isImmutable, getIn, setIn } from './ImmutableUtils';
 
 const EntitySchema = Schema.Entity;
@@ -48,7 +49,9 @@ function denormalizeIterable(items, entities, schema, bag) {
 
   // Handle arrayOf iterables
   if (isMappable) {
-    return items.map(o => denormalize(o, entities, itemSchema, bag));
+    return items
+      .map(o => denormalize(o, entities, itemSchema, bag))
+      .filter(o => ! isEmpty(o));
   }
 
   // Handle valuesOf iterables
@@ -147,7 +150,7 @@ function denormalizeEntity(entityOrId, entities, schema, bag) {
   // If schema has a property called `computed` add it to the
   // final denormalized object. This property contains a collection
   // of method to compute data from the final entity.
-  if (schema.schema && schema.schema.hasOwnProperty('_computed')) {
+  if (schema.schema && schema.schema.hasOwnProperty('_computed') && bag[key][id].id) {
     bag[key][id] = Object.assign(bag[key][id], schema.schema._computed);
   }
 
