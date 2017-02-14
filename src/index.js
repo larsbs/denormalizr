@@ -147,7 +147,7 @@ function denormalizeEntity(entityOrId, entities, schema, bag) {
   // If schema has a property called `computed` add it to the
   // final denormalized object. This property contains a collection
   // of method to compute data from the final entity.
-  if (schema.schema && schema.schema.hasOwnProperty('_computed')) {
+  if (schema.schema && schema.schema.hasOwnProperty('_computed') && bag[key][id].id) {
     bag[key][id] = Object.assign(bag[key][id], schema.schema._computed);
   }
 
