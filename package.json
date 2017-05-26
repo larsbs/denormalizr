@@ -1,6 +1,6 @@
 {
   "name": "entman-denormalizr",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Denormalizer for normalizr",
   "main": "lib/index.js",
   "scripts": {

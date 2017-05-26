@@ -114,12 +114,7 @@ function denormalizeObject(obj, entities, schema, bag) {
       const itemSchema = getIn(schemaDefinition, [attribute]);
 
       const denormalizedAttribute = denormalize(item, entities, itemSchema, bag);
-      if ( ! isEmpty(denormalizedAttribute)) {
-        denormalized = setIn(denormalized, [attribute], denormalizedAttribute);
-      }
-      else {
-        denormalized = setIn(denormalized, [attribute], null);
-      }
+      denormalized = setIn(denormalized, [attribute], denormalizedAttribute);
     });
 
   return denormalized;
@@ -182,7 +177,11 @@ export function denormalize(obj, entities, schema, bag = {}) {
     return obj;
   }
 
-  if (schema instanceof EntitySchema) {
+  if ( ! (schema instanceof EntitySchema) && schema.hasOwnProperty('_key')) {
+    console.warn('You probably have two copies of normalizr in the node_modules folder. This can lead to unexpected behavior.')
+  }
+
+  if (schema instanceof EntitySchema || schema.hasOwnProperty('_key')) {
     return denormalizeEntity(obj, entities, schema, bag);
   } else if (
     schema instanceof ValuesSchema ||
