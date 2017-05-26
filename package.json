@@ -1,18 +1,15 @@
 {
   "name": "entman-denormalizr",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Denormalizer for normalizr",
-  "main": "dist/src/index.js",
-  "files": [
-    "dist"
-  ],
+  "main": "lib/index.js",
   "scripts": {
     "cover": "babel-node ./node_modules/istanbul/lib/cli cover -- _mocha --recursive --reporter spec",
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf dist && rimraf lib",
     "prepublish": "npm run build",
-    "build": "npm run build:node && npm run build:production && npm run build:development",
-    "build:node": "babel src --out-dir dist/src",
-    "build:production": "NODE_ENV=production webpack -p",
+    "build": "npm run build:commonjs && npm run build:umd",
+    "build:commonjs": "NODE_ENV=production babel src --out-dir lib/",
+    "build:umd": "NODE_ENV=production webpack -p",
     "build:development": "NODE_ENV=development webpack",
     "test": "mocha --compilers js:babel-core/register --recursive",
     "test:watch": "npm run test -- --watch",

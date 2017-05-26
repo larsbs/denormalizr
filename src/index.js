@@ -115,9 +115,10 @@ function denormalizeObject(obj, entities, schema, bag) {
 
       const denormalizedAttribute = denormalize(item, entities, itemSchema, bag);
       if ( ! isEmpty(denormalizedAttribute)) {
-        // Only replace attributes with the denormalized object when that object is not empty,
-        // this way, we don't replace ids of objects still to load
         denormalized = setIn(denormalized, [attribute], denormalizedAttribute);
+      }
+      else {
+        denormalized = setIn(denormalized, [attribute], null);
       }
     });
 
@@ -177,6 +178,7 @@ function denormalizeEntity(entityOrId, entities, schema, bag) {
  * @returns {object|Immutable.Map|array|Immutable.list}
  */
 export function denormalize(obj, entities, schema, bag = {}) {
+    console.log('asdfa');
   if (obj === null || typeof obj === 'undefined' || !isObject(schema)) {
     return obj;
   }

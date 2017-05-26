@@ -5442,6 +5442,8 @@ function denormalizeObject(obj, entities, schema, bag) {
 
     var denormalizedAttribute = denormalize(item, entities, itemSchema, bag);
     if (!(0, _isEmpty2.default)(denormalizedAttribute)) {
+      // Only replace attributes with the denormalized object when that object is not empty,
+      // this way, we don't replace ids of objects still to load
       denormalized = (0, _ImmutableUtils.setIn)(denormalized, [attribute], denormalizedAttribute);
     }
   });
@@ -5484,7 +5486,6 @@ function denormalizeEntity(entityOrId, entities, schema, bag) {
   // final denormalized object. This property contains a collection
   // of method to compute data from the final entity.
   if (schema.schema && schema.schema.hasOwnProperty('_computed') && bag[key][id].id) {
-    console.log(bag[key][id], bag[key][id].id);
     bag[key][id] = Object.assign(bag[key][id], schema.schema._computed);
   }
 
