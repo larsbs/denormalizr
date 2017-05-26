@@ -113,7 +113,12 @@ function denormalizeObject(obj, entities, schema, bag) {
       const item = getIn(obj, [attribute]);
       const itemSchema = getIn(schemaDefinition, [attribute]);
 
-      denormalized = setIn(denormalized, [attribute], denormalize(item, entities, itemSchema, bag));
+      const denormalizedAttribute = denormalize(item, entities, itemSchema, bag);
+      if ( ! isEmpty(denormalizedAttribute)) {
+        // Only replace attributes with the denormalized object when that object is not empty,
+        // this way, we don't replace ids of objects still to load
+        denormalized = setIn(denormalized, [attribute], denormalizedAttribute);
+      }
     });
 
   return denormalized;
@@ -145,7 +150,7 @@ function denormalizeEntity(entityOrId, entities, schema, bag) {
     // denormalizeObject, it will already exist.
     bag[key][id] = obj;
     bag[key][id] = denormalizeObject(obj, entities, schema, bag);
-  }
+ }
 
   // If schema has a property called `computed` add it to the
   // final denormalized object. This property contains a collection

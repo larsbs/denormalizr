@@ -1,6 +1,6 @@
 {
   "name": "entman-denormalizr",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Denormalizer for normalizr",
   "main": "dist/src/index.js",
   "files": [
@@ -20,18 +20,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gpbl/denormalizr.git"
+    "url": "git+https://github.com/larbs/entman-denormalizr.git"
   },
   "keywords": [
     "normalizr",
     "normalize"
   ],
-  "author": "Giampaolo Bellavite",
+  "author": "Lorenzo Ruiz <lars.bs@hotmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gpbl/denormalizr/issues"
-  },
-  "homepage": "https://github.com/gpbl/denormalizr#readme",
   "devDependencies": {
     "babel-cli": "^6.22.2",
     "babel-core": "^6.22.1",

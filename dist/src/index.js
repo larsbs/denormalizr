@@ -127,7 +127,10 @@ function denormalizeObject(obj, entities, schema, bag) {
     var item = (0, _ImmutableUtils.getIn)(obj, [attribute]);
     var itemSchema = (0, _ImmutableUtils.getIn)(schemaDefinition, [attribute]);
 
-    denormalized = (0, _ImmutableUtils.setIn)(denormalized, [attribute], denormalize(item, entities, itemSchema, bag));
+    var denormalizedAttribute = denormalize(item, entities, itemSchema, bag);
+    if (!(0, _isEmpty2.default)(denormalizedAttribute)) {
+      denormalized = (0, _ImmutableUtils.setIn)(denormalized, [attribute], denormalizedAttribute);
+    }
   });
 
   return denormalized;
@@ -168,6 +171,7 @@ function denormalizeEntity(entityOrId, entities, schema, bag) {
   // final denormalized object. This property contains a collection
   // of method to compute data from the final entity.
   if (schema.schema && schema.schema.hasOwnProperty('_computed') && bag[key][id].id) {
+    console.log(bag[key][id], bag[key][id].id);
     bag[key][id] = Object.assign(bag[key][id], schema.schema._computed);
   }
 
