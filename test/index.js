@@ -605,7 +605,8 @@ describe('denormalize', () => {
       const data = getNormalizedEntities();
       const article = data.entities.articles['3'];
       const result = denormalize(article, data.entities, articleSchema);
-      expect(result.collections.some((c) => c.hasOwnProperty('getDumbComputedProperty'))).to.be.false;
+      expect(result.collections).to.be.null;
+      //expect(result.collections.some((c) => c.hasOwnProperty('getDumbComputedProperty'))).to.be.false;
     });
   });
 

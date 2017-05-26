@@ -114,7 +114,12 @@ function denormalizeObject(obj, entities, schema, bag) {
       const itemSchema = getIn(schemaDefinition, [attribute]);
 
       const denormalizedAttribute = denormalize(item, entities, itemSchema, bag);
-      denormalized = setIn(denormalized, [attribute], denormalizedAttribute);
+      if (isEmpty(denormalizedAttribute)) {
+        denormalized = setIn(denormalized, [attribute], null);
+      }
+      else {
+        denormalized = setIn(denormalized, [attribute], denormalizedAttribute);
+      }
     });
 
   return denormalized;
