@@ -178,7 +178,6 @@ function denormalizeEntity(entityOrId, entities, schema, bag) {
  * @returns {object|Immutable.Map|array|Immutable.list}
  */
 export function denormalize(obj, entities, schema, bag = {}) {
-    console.log('asdfa');
   if (obj === null || typeof obj === 'undefined' || !isObject(schema)) {
     return obj;
   }
