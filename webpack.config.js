@@ -4,7 +4,7 @@ var isProduction = process.env.NODE_ENV === 'production';
 var filename = `denormalizr${isProduction ? '.min' : ''}.js`;
 
 module.exports = {
-  entry: './dist/src/index.js',
+  entry: './lib/index.js',
   output: {
     path: `${__dirname}/dist`,
     filename: filename,
